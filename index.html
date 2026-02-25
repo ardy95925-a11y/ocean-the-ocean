@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>INFERNO & FROST — Rhythm Game</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700;900&family=Rajdhani:wght@300;400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <canvas id="particleCanvas"></canvas>
+
+  <!-- MENU SCREEN -->
+  <div id="menuScreen" class="screen active">
+    <div class="menu-bg-split">
+      <div class="side fire-side"></div>
+      <div class="side ice-side"></div>
+    </div>
+    <div class="menu-center">
+      <div class="title-block">
+        <h1 class="title-fire">INFERNO</h1>
+        <span class="title-amp">&amp;</span>
+        <h1 class="title-ice">FROST</h1>
+      </div>
+      <p class="subtitle">A Dance of Elements</p>
+      <div class="menu-controls-hint">
+        <div class="key-hint fire-hint">
+          <span class="key">F</span>
+          <span class="key">G</span>
+          <span class="key">H</span>
+          <span class="key">J</span>
+          <span class="label">FIRE LANE</span>
+        </div>
+        <div class="key-hint ice-hint">
+          <span class="key">S</span>
+          <span class="key">D</span>
+          <span class="key">F</span>
+          <span class="key">← ↓ ↑ →</span>
+          <span class="label">ICE LANE</span>
+        </div>
+      </div>
+      <div class="difficulty-select">
+        <button class="diff-btn active" data-diff="easy">EMBER</button>
+        <button class="diff-btn" data-diff="normal">BLAZE</button>
+        <button class="diff-btn" data-diff="hard">INFERNO</button>
+      </div>
+      <button id="startBtn" class="start-btn">
+        <span class="btn-fire">IGNITE</span>
+        <span class="btn-ice">THE STORM</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- GAME SCREEN -->
+  <div id="gameScreen" class="screen">
+    <div class="game-header">
+      <div class="score-display">
+        <div class="score-label">SCORE</div>
+        <div class="score-value" id="scoreDisplay">0</div>
+      </div>
+      <div class="combo-display">
+        <div id="comboValue" class="combo-number">0</div>
+        <div class="combo-label">COMBO</div>
+      </div>
+      <div class="stats-display">
+        <div class="stat-item"><span id="perfectCount">0</span><small>PERFECT</small></div>
+        <div class="stat-item"><span id="goodCount">0</span><small>GOOD</small></div>
+        <div class="stat-item"><span id="missCount">0</span><small>MISS</small></div>
+      </div>
+    </div>
+
+    <div id="songInfo" class="song-info">
+      <div class="song-name" id="songName">Loading...</div>
+      <div class="song-progress-wrap">
+        <div class="song-progress-bar"><div id="songProgress" class="song-progress-fill"></div></div>
+      </div>
+    </div>
+
+    <div class="lanes-container">
+      <!-- ICE LANES (top half) -->
+      <div class="lane-group ice-group" id="iceLanes">
+        <div class="lane-group-label ice-label">❄ ICE</div>
+        <div class="lane" id="iceLane0" data-lane="ice0">
+          <div class="lane-track"></div>
+          <div class="hit-zone ice-hitzone"></div>
+        </div>
+        <div class="lane" id="iceLane1" data-lane="ice1">
+          <div class="lane-track"></div>
+          <div class="hit-zone ice-hitzone"></div>
+        </div>
+        <div class="lane" id="iceLane2" data-lane="ice2">
+          <div class="lane-track"></div>
+          <div class="hit-zone ice-hitzone"></div>
+        </div>
+        <div class="lane" id="iceLane3" data-lane="ice3">
+          <div class="lane-track"></div>
+          <div class="hit-zone ice-hitzone"></div>
+        </div>
+      </div>
+
+      <!-- CENTER DIVIDER -->
+      <div class="center-divider">
+        <div class="divider-flame" id="dividerFlame"></div>
+        <div class="bpm-display" id="bpmDisplay">♪ 120 BPM</div>
+      </div>
+
+      <!-- FIRE LANES (bottom half) -->
+      <div class="lane-group fire-group" id="fireLanes">
+        <div class="lane-group-label fire-label">🔥 FIRE</div>
+        <div class="lane" id="fireLane0" data-lane="fire0">
+          <div class="lane-track"></div>
+          <div class="hit-zone fire-hitzone"></div>
+        </div>
+        <div class="lane" id="fireLane1" data-lane="fire1">
+          <div class="lane-track"></div>
+          <div class="hit-zone fire-hitzone"></div>
+        </div>
+        <div class="lane" id="fireLane2" data-lane="fire2">
+          <div class="lane-track"></div>
+          <div class="hit-zone fire-hitzone"></div>
+        </div>
+        <div class="lane" id="fireLane3" data-lane="fire3">
+          <div class="lane-track"></div>
+          <div class="hit-zone fire-hitzone"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Key labels -->
+    <div class="key-labels ice-keys">
+      <span>S</span><span>D</span><span>K</span><span>L</span>
+    </div>
+    <div class="key-labels fire-keys">
+      <span>F</span><span>G</span><span>H</span><span>J</span>
+    </div>
+
+    <!-- Hit feedback -->
+    <div id="hitFeedback" class="hit-feedback"></div>
+
+    <button id="pauseBtn" class="pause-btn">⏸</button>
+  </div>
+
+  <!-- PAUSE SCREEN -->
+  <div id="pauseScreen" class="screen overlay-screen">
+    <div class="pause-panel">
+      <h2>PAUSED</h2>
+      <button id="resumeBtn" class="menu-action-btn">RESUME</button>
+      <button id="restartFromPauseBtn" class="menu-action-btn">RESTART</button>
+      <button id="quitBtn" class="menu-action-btn danger">QUIT</button>
+    </div>
+  </div>
+
+  <!-- RESULT SCREEN -->
+  <div id="resultScreen" class="screen">
+    <div class="result-content">
+      <div class="result-grade" id="resultGrade">S</div>
+      <div class="result-title" id="resultTitle">LEGENDARY</div>
+      <div class="result-score" id="resultScore">0</div>
+      <div class="result-stats">
+        <div class="result-stat">
+          <div class="rs-val" id="rsPerfect">0</div>
+          <div class="rs-label">PERFECT</div>
+        </div>
+        <div class="result-stat">
+          <div class="rs-val" id="rsGood">0</div>
+          <div class="rs-label">GOOD</div>
+        </div>
+        <div class="result-stat">
+          <div class="rs-val" id="rsMiss">0</div>
+          <div class="rs-label">MISS</div>
+        </div>
+        <div class="result-stat">
+          <div class="rs-val" id="rsMaxCombo">0</div>
+          <div class="rs-label">MAX COMBO</div>
+        </div>
+        <div class="result-stat">
+          <div class="rs-val" id="rsAccuracy">0%</div>
+          <div class="rs-label">ACCURACY</div>
+        </div>
+      </div>
+      <div class="result-actions">
+        <button id="retryBtn" class="menu-action-btn">RETRY</button>
+        <button id="menuBtn" class="menu-action-btn">MENU</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="particles.js"></script>
+  <script src="audio.js"></script>
+  <script src="game.js"></script>
+</body>
+</html>
