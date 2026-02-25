@@ -1,0 +1,281 @@
+* { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+body {
+  background: #000;
+  overflow: hidden;
+  font-family: 'Nunito', sans-serif;
+  touch-action: none;
+  user-select: none;
+}
+
+#gameCanvas {
+  display: block;
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw; height: 100vh;
+  image-rendering: pixelated;
+}
+
+#ui-overlay {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  pointer-events: none;
+  z-index: 10;
+}
+
+/* ── HUD ── */
+#hud {
+  pointer-events: none;
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  background: linear-gradient(to bottom, rgba(0,10,30,.7) 0%, transparent 100%);
+}
+#air-bar-container { display: flex; align-items: center; gap: 8px; flex: 1; }
+#air-label { font-family: 'Bebas Neue', cursive; color: #7ef0ff; font-size: 18px; letter-spacing: 2px; }
+#air-bar-bg { flex: 1; height: 14px; background: rgba(255,255,255,.15); border-radius: 7px; overflow: hidden; border: 1px solid rgba(126,240,255,.3); }
+#air-bar { height: 100%; width: 100%; background: linear-gradient(90deg, #00d4ff, #7ef0ff); border-radius: 7px; transition: width .2s; box-shadow: 0 0 8px #00d4ff; }
+#depth-display { font-family: 'Bebas Neue', cursive; color: #fff; font-size: 18px; letter-spacing: 1px; }
+#resources-hud { font-size: 15px; color: #fff; }
+#score-hud { font-family: 'Bebas Neue', cursive; font-size: 22px; color: #ffd700; }
+
+/* ── SCREENS ── */
+.screen {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  pointer-events: all;
+}
+
+/* ── MENU ── */
+#menu-screen {
+  background: linear-gradient(180deg, #000d1a 0%, #001f3f 40%, #003366 70%, #004080 100%);
+  overflow: hidden;
+}
+.menu-bg-glow {
+  position: absolute;
+  bottom: 30%; left: 50%;
+  transform: translateX(-50%);
+  width: 600px; height: 300px;
+  background: radial-gradient(ellipse, rgba(0,150,255,.25) 0%, transparent 70%);
+  pointer-events: none;
+}
+.menu-content {
+  display: flex; flex-direction: column;
+  align-items: center; gap: 20px;
+  z-index: 1;
+}
+.logo { text-align: center; }
+.logo-sub { font-family: 'Bebas Neue', cursive; font-size: 28px; color: #00d4ff; letter-spacing: 12px; opacity: .8; }
+.logo-main { font-family: 'Bebas Neue', cursive; font-size: 96px; line-height: .9; color: #fff; letter-spacing: 4px; text-shadow: 0 0 40px rgba(0,180,255,.6), 0 4px 20px rgba(0,0,0,.8); }
+.logo-tag { font-size: 14px; color: rgba(255,255,255,.5); letter-spacing: 6px; text-transform: uppercase; margin-top: 4px; }
+.money-display-menu { font-family: 'Bebas Neue', cursive; font-size: 24px; color: #ffd700; letter-spacing: 2px; margin-top: 8px; }
+.wave-decoration {
+  position: absolute; bottom: 0; left: 0; right: 0; height: 120px;
+  background: linear-gradient(180deg, transparent, rgba(0,80,180,.4));
+  pointer-events: none;
+}
+.wave-decoration::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; height: 3px;
+  background: linear-gradient(90deg, transparent, #00d4ff, transparent);
+  animation: waveLine 3s ease-in-out infinite;
+}
+@keyframes waveLine { 0%,100%{opacity:.4} 50%{opacity:1} }
+
+/* ── BUTTONS ── */
+.btn-primary {
+  font-family: 'Bebas Neue', cursive;
+  font-size: 28px; letter-spacing: 3px;
+  padding: 14px 56px;
+  background: linear-gradient(135deg, #00b4ff, #0070cc);
+  color: #fff; border: none; border-radius: 50px;
+  cursor: pointer; pointer-events: all;
+  box-shadow: 0 4px 24px rgba(0,150,255,.5), inset 0 1px 0 rgba(255,255,255,.2);
+  transition: transform .1s, box-shadow .1s;
+  -webkit-tap-highlight-color: transparent;
+}
+.btn-primary:active { transform: scale(.96); box-shadow: 0 2px 12px rgba(0,150,255,.4); }
+
+.btn-secondary {
+  font-family: 'Bebas Neue', cursive;
+  font-size: 22px; letter-spacing: 2px;
+  padding: 10px 40px;
+  background: rgba(255,255,255,.08);
+  color: rgba(255,255,255,.8); border: 1px solid rgba(255,255,255,.2); border-radius: 50px;
+  cursor: pointer; pointer-events: all;
+  transition: background .15s, transform .1s;
+}
+.btn-secondary:active { transform: scale(.96); background: rgba(255,255,255,.15); }
+
+/* ── SHOP ── */
+#shop-screen {
+  background: linear-gradient(180deg, #000d1a, #001a33);
+  align-items: stretch; justify-content: flex-start;
+  padding: 0;
+  overflow: hidden;
+}
+.shop-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 20px 24px 12px;
+  background: rgba(0,0,0,.3);
+  border-bottom: 1px solid rgba(0,180,255,.2);
+}
+.shop-header h2 { font-family: 'Bebas Neue', cursive; font-size: 28px; color: #fff; letter-spacing: 3px; }
+.shop-money { font-family: 'Bebas Neue', cursive; font-size: 22px; color: #ffd700; }
+.btn-back {
+  font-family: 'Nunito', sans-serif; font-weight: 700;
+  font-size: 16px; padding: 8px 16px;
+  background: rgba(255,255,255,.08); color: #fff;
+  border: 1px solid rgba(255,255,255,.2); border-radius: 20px;
+  cursor: pointer; pointer-events: all;
+}
+.btn-back:active { background: rgba(255,255,255,.2); }
+
+.shop-tabs {
+  display: flex; gap: 0;
+  border-bottom: 1px solid rgba(255,255,255,.1);
+}
+.tab {
+  flex: 1; padding: 12px;
+  font-family: 'Bebas Neue', cursive; font-size: 18px; letter-spacing: 2px;
+  background: transparent; color: rgba(255,255,255,.4);
+  border: none; cursor: pointer; pointer-events: all;
+  border-bottom: 3px solid transparent;
+  transition: all .2s;
+}
+.tab.active { color: #00d4ff; border-bottom-color: #00d4ff; }
+
+#shop-items-container {
+  flex: 1; overflow-y: auto;
+  padding: 16px;
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  align-content: start;
+}
+.shop-item {
+  background: rgba(255,255,255,.05);
+  border: 1px solid rgba(255,255,255,.1);
+  border-radius: 16px;
+  padding: 16px;
+  display: flex; flex-direction: column;
+  gap: 8px;
+  transition: border-color .2s;
+}
+.shop-item.owned { border-color: rgba(0,212,255,.4); background: rgba(0,212,255,.06); }
+.shop-item.locked { opacity: .5; }
+.shop-item-icon { font-size: 36px; text-align: center; }
+.shop-item-name { font-family: 'Bebas Neue', cursive; font-size: 16px; color: #fff; letter-spacing: 1px; text-align: center; }
+.shop-item-desc { font-size: 11px; color: rgba(255,255,255,.5); text-align: center; line-height: 1.4; }
+.shop-item-price {
+  font-family: 'Bebas Neue', cursive; font-size: 18px;
+  color: #ffd700; text-align: center;
+}
+.shop-item-price.owned-label { color: #00d4ff; }
+.btn-buy {
+  font-family: 'Bebas Neue', cursive; font-size: 15px; letter-spacing: 1px;
+  padding: 8px;
+  background: linear-gradient(135deg, #00b4ff, #0070cc);
+  color: #fff; border: none; border-radius: 20px;
+  cursor: pointer; pointer-events: all;
+  transition: opacity .15s, transform .1s;
+}
+.btn-buy:disabled { opacity: .4; cursor: not-allowed; }
+.btn-buy:not(:disabled):active { transform: scale(.96); }
+.btn-buy.owned-btn { background: rgba(0,212,255,.2); color: #00d4ff; cursor: default; }
+
+/* ── GAME OVER ── */
+#gameover-screen { background: rgba(0,5,15,.95); }
+.gameover-content {
+  display: flex; flex-direction: column; align-items: center; gap: 20px;
+  padding: 32px 24px;
+  background: rgba(255,255,255,.04);
+  border: 1px solid rgba(0,180,255,.2);
+  border-radius: 24px;
+  max-width: 400px; width: 90%;
+}
+#gameover-screen h1 {
+  font-family: 'Bebas Neue', cursive; font-size: 48px;
+  color: #fff; letter-spacing: 4px;
+  text-shadow: 0 0 20px rgba(0,180,255,.5);
+}
+.run-stats { width: 100%; display: flex; flex-direction: column; gap: 10px; }
+.stat-row {
+  display: flex; justify-content: space-between;
+  padding: 10px 16px;
+  background: rgba(255,255,255,.05); border-radius: 10px;
+  font-size: 16px; font-weight: 700; color: #fff;
+}
+.stat-row span:last-child { color: #00d4ff; }
+.go-total {
+  font-family: 'Bebas Neue', cursive; font-size: 32px;
+  color: #ffd700; letter-spacing: 2px;
+}
+.go-total span { color: #ffd700; }
+
+/* ── TUTORIAL ── */
+#tutorial-overlay {
+  position: absolute; inset: 0;
+  background: rgba(0,0,0,.7);
+  display: flex; align-items: center; justify-content: center;
+  pointer-events: all; z-index: 20;
+}
+.tutorial-box {
+  background: linear-gradient(135deg, #001533, #002244);
+  border: 1px solid rgba(0,180,255,.3);
+  border-radius: 20px;
+  padding: 32px 28px;
+  max-width: 360px; width: 90%;
+  display: flex; flex-direction: column; gap: 16px;
+  text-align: center;
+}
+.tutorial-box h3 { font-family: 'Bebas Neue', cursive; font-size: 32px; color: #fff; letter-spacing: 3px; }
+.tutorial-box p { font-size: 16px; color: rgba(255,255,255,.8); line-height: 1.5; }
+
+/* ── TOUCH CONTROLS ── */
+#touch-controls {
+  position: absolute; bottom: 0; left: 0; right: 0;
+  display: flex; justify-content: space-between; align-items: flex-end;
+  padding: 16px 24px 28px;
+  pointer-events: none;
+}
+#dpad {
+  display: flex; flex-direction: column; align-items: center; gap: 2px;
+  pointer-events: all;
+}
+.dpad-row { display: flex; gap: 2px; align-items: center; }
+.dpad-center { width: 44px; height: 44px; background: rgba(255,255,255,.05); border-radius: 4px; }
+.dpad-btn {
+  width: 56px; height: 56px;
+  background: rgba(0,100,200,.3);
+  border: 1px solid rgba(0,180,255,.3);
+  border-radius: 8px; font-size: 20px; color: #fff;
+  cursor: pointer; pointer-events: all;
+  display: flex; align-items: center; justify-content: center;
+  backdrop-filter: blur(4px);
+  -webkit-tap-highlight-color: transparent;
+  transition: background .1s;
+}
+.dpad-btn:active, .dpad-btn.pressed { background: rgba(0,150,255,.5); }
+#action-buttons { pointer-events: all; }
+.action-btn {
+  width: 80px; height: 80px;
+  background: rgba(0,180,80,.3);
+  border: 2px solid rgba(0,255,120,.4);
+  border-radius: 50%;
+  font-family: 'Bebas Neue', cursive; font-size: 13px; letter-spacing: 1px;
+  color: #fff; cursor: pointer; pointer-events: all;
+  text-align: center; line-height: 1.2;
+  display: flex; align-items: center; justify-content: center;
+  backdrop-filter: blur(4px);
+  -webkit-tap-highlight-color: transparent;
+  transition: background .1s;
+}
+.action-btn:active { background: rgba(0,220,100,.5); }
+
+/* ── UTILS ── */
+.hidden { display: none !important; }

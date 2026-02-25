@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Deep Dive - Ocean Explorer</title>
+<link rel="stylesheet" href="style.css">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+<canvas id="gameCanvas"></canvas>
+
+<!-- UI Overlay -->
+<div id="ui-overlay">
+  <div id="hud" class="hidden">
+    <div id="air-bar-container">
+      <div id="air-label">AIR</div>
+      <div id="air-bar-bg"><div id="air-bar"></div></div>
+    </div>
+    <div id="depth-display">DEPTH: <span id="depth-val">0</span>m</div>
+    <div id="resources-hud">
+      <span id="res-display">🪸 0  💎 0  🐚 0</span>
+    </div>
+    <div id="score-hud">💰 <span id="money-display">0</span></div>
+  </div>
+
+  <!-- Main Menu -->
+  <div id="menu-screen" class="screen">
+    <div class="menu-bg-glow"></div>
+    <div class="menu-content">
+      <div class="logo">
+        <div class="logo-sub">DEEP</div>
+        <div class="logo-main">DIVE</div>
+        <div class="logo-tag">Ocean Explorer</div>
+      </div>
+      <button class="btn-primary" id="btn-play">DIVE IN</button>
+      <button class="btn-secondary" id="btn-shop-menu">SHOP</button>
+      <div class="money-display-menu">💰 <span id="menu-money">0</span></div>
+    </div>
+    <div class="wave-decoration"></div>
+  </div>
+
+  <!-- Shop Screen -->
+  <div id="shop-screen" class="screen hidden">
+    <div class="shop-header">
+      <button class="btn-back" id="btn-back-shop">← BACK</button>
+      <h2>UPGRADE SHOP</h2>
+      <div class="shop-money">💰 <span id="shop-money">0</span></div>
+    </div>
+    <div class="shop-tabs">
+      <button class="tab active" data-tab="suit">SUIT</button>
+      <button class="tab" data-tab="boat">BOAT</button>
+      <button class="tab" data-tab="items">ITEMS</button>
+    </div>
+    <div id="shop-items-container"></div>
+  </div>
+
+  <!-- Game Over Screen -->
+  <div id="gameover-screen" class="screen hidden">
+    <div class="gameover-content">
+      <h1>RUN COMPLETE</h1>
+      <div class="run-stats">
+        <div class="stat-row"><span>Max Depth</span><span id="go-depth">0m</span></div>
+        <div class="stat-row"><span>Resources</span><span id="go-resources">0</span></div>
+        <div class="stat-row"><span>Earnings</span><span id="go-earnings">+0</span></div>
+      </div>
+      <div class="go-total">TOTAL 💰 <span id="go-total">0</span></div>
+      <button class="btn-primary" id="btn-replay">DIVE AGAIN</button>
+      <button class="btn-secondary" id="btn-go-shop">SHOP</button>
+      <button class="btn-secondary" id="btn-go-menu">MENU</button>
+    </div>
+  </div>
+
+  <!-- Tutorial -->
+  <div id="tutorial-overlay" class="hidden">
+    <div class="tutorial-box">
+      <h3>HOW TO PLAY</h3>
+      <p>🚤 Tap <b>JUMP</b> to dive from the boat</p>
+      <p>🎮 Use the <b>D-PAD</b> to swim</p>
+      <p>🪸 Collect resources before air runs out</p>
+      <p>💨 Air refills when you surface</p>
+      <button class="btn-primary" id="btn-tut-close">LET'S GO!</button>
+    </div>
+  </div>
+
+  <!-- Touch Controls -->
+  <div id="touch-controls" class="hidden">
+    <div id="dpad">
+      <button class="dpad-btn" id="btn-up">▲</button>
+      <div class="dpad-row">
+        <button class="dpad-btn" id="btn-left">◀</button>
+        <div class="dpad-center"></div>
+        <button class="dpad-btn" id="btn-right">▶</button>
+      </div>
+      <button class="dpad-btn" id="btn-down">▼</button>
+    </div>
+    <div id="action-buttons">
+      <button class="action-btn" id="btn-jump">DIVE/<br>SURFACE</button>
+    </div>
+  </div>
+</div>
+
+<script src="physics.js"></script>
+<script src="shop.js"></script>
+<script src="game.js"></script>
+</body>
+</html>
