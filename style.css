@@ -1,0 +1,143 @@
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;user-select:none}
+body{background:#000;overflow:hidden;font-family:'Exo 2',sans-serif;touch-action:none}
+#gameCanvas{display:block;position:fixed;top:0;left:0;width:100vw;height:100vh}
+
+/* ── UI OVERLAY ── */
+#ui-overlay{position:fixed;inset:0;pointer-events:none;z-index:10}
+.screen{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;pointer-events:all}
+
+/* ── HUD ── */
+#hud{position:absolute;top:0;left:0;right:0;pointer-events:none}
+#hud-top{
+  display:flex;align-items:center;gap:12px;
+  padding:env(safe-area-inset-top,12px) 16px 12px;
+  padding-top:max(env(safe-area-inset-top),12px);
+  background:linear-gradient(to bottom,rgba(0,8,24,.85) 0%,transparent 100%);
+}
+#air-widget{display:flex;align-items:center;gap:8px;flex:1.5}
+#air-icon{font-size:20px;flex-shrink:0}
+#air-bar-wrap{position:relative;flex:1;height:18px;background:rgba(255,255,255,.1);border-radius:9px;overflow:hidden;border:1px solid rgba(0,200,255,.25)}
+#air-bar{position:absolute;top:0;left:0;height:100%;width:100%;border-radius:9px;background:linear-gradient(90deg,#00d4ff,#80f0ff);box-shadow:0 0 10px #00bfff;transition:width .15s,background .3s}
+#air-text{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:'Orbitron',monospace;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.7)}
+#hud-center{text-align:center;flex-shrink:0}
+#depth-val{font-family:'Orbitron',monospace;font-size:22px;font-weight:700;color:#fff;line-height:1}
+#depth-label{font-size:9px;letter-spacing:3px;color:rgba(255,255,255,.4);text-transform:uppercase}
+#hud-right{text-align:right;flex:1}
+#hud-money{font-family:'Orbitron',monospace;font-size:16px;color:#ffd700;font-weight:700}
+#hud-res{font-size:13px;color:rgba(255,255,255,.7);margin-top:2px}
+
+/* ── MENU ── */
+#menu-screen{overflow:hidden}
+#menu-canvas{position:absolute;inset:0;width:100%;height:100%}
+.menu-content{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;gap:28px}
+.logo-wrap{text-align:center}
+.logo-eyebrow{font-family:'Orbitron',monospace;font-size:11px;letter-spacing:6px;color:rgba(0,200,255,.7);text-transform:uppercase;margin-bottom:8px}
+.logo-main{font-family:'Orbitron',monospace;font-size:clamp(56px,14vw,88px);font-weight:900;line-height:.9;color:#fff;text-shadow:0 0 60px rgba(0,160,255,.6),0 4px 30px rgba(0,0,0,.9);letter-spacing:-2px}
+.logo-accent{color:#00d4ff;text-shadow:0 0 40px #00d4ff,0 0 80px rgba(0,212,255,.4)}
+.logo-sub{font-size:13px;color:rgba(255,255,255,.4);letter-spacing:3px;margin-top:12px;text-transform:uppercase}
+.menu-buttons{display:flex;flex-direction:column;align-items:center;gap:14px;width:260px}
+.menu-money-badge{font-family:'Orbitron',monospace;font-size:20px;color:#ffd700;background:rgba(255,215,0,.08);border:1px solid rgba(255,215,0,.2);padding:8px 28px;border-radius:40px;letter-spacing:2px}
+
+/* ── BUTTONS ── */
+.btn-glow{
+  width:100%;padding:16px 0;
+  font-family:'Orbitron',monospace;font-size:18px;font-weight:700;letter-spacing:3px;
+  color:#fff;background:linear-gradient(135deg,#0094e0,#0050a0);
+  border:none;border-radius:50px;cursor:pointer;pointer-events:all;
+  box-shadow:0 0 30px rgba(0,140,255,.5),inset 0 1px 0 rgba(255,255,255,.2);
+  transition:transform .1s,box-shadow .1s;
+}
+.btn-glow:active{transform:scale(.96);box-shadow:0 0 15px rgba(0,140,255,.3)}
+.btn-outline{
+  width:100%;padding:14px 0;
+  font-family:'Orbitron',monospace;font-size:14px;font-weight:600;letter-spacing:2px;
+  color:rgba(255,255,255,.8);background:rgba(255,255,255,.06);
+  border:1px solid rgba(255,255,255,.18);border-radius:50px;
+  cursor:pointer;pointer-events:all;transition:background .15s,transform .1s;
+}
+.btn-outline:active{transform:scale(.96);background:rgba(255,255,255,.14)}
+.btn-icon{
+  font-family:'Exo 2',sans-serif;font-size:14px;font-weight:600;
+  padding:9px 18px;background:rgba(255,255,255,.08);
+  color:#fff;border:1px solid rgba(255,255,255,.15);border-radius:20px;
+  cursor:pointer;pointer-events:all;
+}
+.btn-icon:active{background:rgba(255,255,255,.18)}
+
+/* ── SHOP ── */
+#shop-screen{background:linear-gradient(180deg,#000c1e 0%,#001428 100%);align-items:stretch;justify-content:flex-start;overflow:hidden}
+.shop-topbar{display:flex;align-items:center;justify-content:space-between;padding:max(env(safe-area-inset-top),14px) 20px 14px;background:rgba(0,0,0,.4);border-bottom:1px solid rgba(0,180,255,.15);flex-shrink:0}
+.shop-title{font-family:'Orbitron',monospace;font-size:18px;font-weight:700;color:#fff;letter-spacing:4px}
+.shop-bal{font-family:'Orbitron',monospace;font-size:18px;color:#ffd700;font-weight:700}
+.shop-tabs{display:flex;border-bottom:1px solid rgba(255,255,255,.08);flex-shrink:0}
+.stab{flex:1;padding:13px 8px;font-family:'Exo 2',sans-serif;font-size:13px;font-weight:700;letter-spacing:1px;background:transparent;color:rgba(255,255,255,.35);border:none;border-bottom:3px solid transparent;cursor:pointer;pointer-events:all;transition:all .2s}
+.stab.active{color:#00d4ff;border-bottom-color:#00d4ff;background:rgba(0,212,255,.05)}
+#shop-grid{flex:1;overflow-y:auto;padding:16px;display:grid;grid-template-columns:1fr 1fr;gap:12px;align-content:start;-webkit-overflow-scrolling:touch}
+.sitem{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.09);border-radius:16px;padding:16px 12px;display:flex;flex-direction:column;align-items:center;gap:8px;transition:border-color .2s}
+.sitem.owned{border-color:rgba(0,212,255,.35);background:rgba(0,212,255,.04)}
+.sitem.locked{opacity:.45}
+.sitem-icon{font-size:38px;line-height:1}
+.sitem-name{font-family:'Orbitron',monospace;font-size:11px;color:#fff;letter-spacing:1px;text-align:center;font-weight:700}
+.sitem-desc{font-size:11px;color:rgba(255,255,255,.45);text-align:center;line-height:1.5}
+.sitem-price{font-family:'Orbitron',monospace;font-size:15px;color:#ffd700;font-weight:700}
+.sitem-price.owned{color:#00d4ff;font-size:12px}
+.btn-buy{width:100%;padding:8px 0;font-family:'Orbitron',monospace;font-size:11px;font-weight:700;letter-spacing:1px;background:linear-gradient(135deg,#0094e0,#0050a0);color:#fff;border:none;border-radius:20px;cursor:pointer;pointer-events:all;transition:opacity .15s,transform .1s}
+.btn-buy:disabled{opacity:.35;cursor:not-allowed}
+.btn-buy:not(:disabled):active{transform:scale(.95)}
+.btn-buy.is-owned{background:rgba(0,212,255,.15);color:#00d4ff;cursor:default}
+
+/* ── GAME OVER ── */
+#gameover-screen{background:rgba(0,4,14,.92)}
+.go-panel{background:rgba(5,20,50,.8);border:1px solid rgba(0,160,255,.2);border-radius:24px;padding:32px 28px;width:90%;max-width:400px;display:flex;flex-direction:column;align-items:center;gap:24px;backdrop-filter:blur(16px)}
+.go-title{font-family:'Orbitron',monospace;font-size:28px;font-weight:900;color:#fff;letter-spacing:4px;text-shadow:0 0 30px rgba(0,160,255,.5)}
+.go-stats{width:100%;display:flex;flex-direction:column;gap:10px}
+.go-stat{display:flex;justify-content:space-between;align-items:center;padding:11px 16px;background:rgba(255,255,255,.04);border-radius:10px}
+.go-stat.big{background:rgba(255,215,0,.06);border:1px solid rgba(255,215,0,.15)}
+.gs-label{font-size:12px;letter-spacing:2px;color:rgba(255,255,255,.45);text-transform:uppercase}
+.gs-val{font-family:'Orbitron',monospace;font-size:18px;color:#fff;font-weight:700}
+.gs-val.gold{color:#ffd700}
+.go-divider{height:1px;background:rgba(255,255,255,.08);width:100%;margin:4px 0}
+.go-btns{width:100%;display:flex;flex-direction:column;gap:10px}
+
+/* ── TUTORIAL ── */
+#tut-overlay{position:absolute;inset:0;background:rgba(0,0,0,.75);display:flex;align-items:center;justify-content:center;pointer-events:all;z-index:30}
+.tut-panel{background:linear-gradient(135deg,#001428,#002040);border:1px solid rgba(0,180,255,.25);border-radius:22px;padding:32px 28px;max-width:380px;width:90%;display:flex;flex-direction:column;gap:20px}
+.tut-title{font-family:'Orbitron',monospace;font-size:22px;font-weight:900;color:#fff;letter-spacing:3px;text-align:center}
+.tut-rows{display:flex;flex-direction:column;gap:12px}
+.tut-row{display:flex;align-items:center;gap:14px;font-size:14px;color:rgba(255,255,255,.8);line-height:1.5}
+.tut-icon{font-size:26px;flex-shrink:0;width:36px;text-align:center}
+
+/* ── TOUCH CONTROLS ── */
+#touch-controls{
+  position:absolute;bottom:0;left:0;right:0;
+  display:flex;justify-content:space-between;align-items:flex-end;
+  padding:16px 24px max(env(safe-area-inset-bottom),24px);
+  pointer-events:none;
+}
+#dpad{display:flex;flex-direction:column;align-items:center;gap:3px;pointer-events:all}
+.dpad-row{display:flex;justify-content:center}
+.dpad-mid{display:flex;align-items:center;gap:3px}
+.dp-center{width:52px;height:52px;background:rgba(255,255,255,.04);border-radius:8px}
+.dp{
+  width:58px;height:58px;
+  background:rgba(10,60,140,.45);
+  border:1.5px solid rgba(0,180,255,.3);
+  border-radius:12px;font-size:18px;color:rgba(255,255,255,.85);
+  cursor:pointer;pointer-events:all;
+  display:flex;align-items:center;justify-content:center;
+  backdrop-filter:blur(6px);transition:background .08s,transform .08s;
+}
+.dp:active,.dp.held{background:rgba(0,140,255,.55);transform:scale(.94)}
+.btn-action{
+  pointer-events:all;
+  width:88px;height:88px;border-radius:50%;
+  background:radial-gradient(circle at 35% 35%,rgba(0,180,80,.6),rgba(0,100,40,.4));
+  border:2px solid rgba(0,255,100,.35);
+  font-family:'Orbitron',monospace;font-size:11px;font-weight:700;letter-spacing:1px;
+  color:#fff;cursor:pointer;text-align:center;line-height:1.3;
+  backdrop-filter:blur(6px);transition:background .08s,transform .08s;
+}
+.btn-action:active{transform:scale(.92);background:radial-gradient(circle at 35% 35%,rgba(0,220,90,.7),rgba(0,140,50,.5))}
+
+/* ── UTILS ── */
+.hidden{display:none!important}

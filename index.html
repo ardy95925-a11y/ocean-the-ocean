@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+<title>Deep Dive</title>
+<link rel="stylesheet" href="style.css">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Exo+2:wght@300;400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+<canvas id="gameCanvas"></canvas>
+<div id="ui-overlay">
+
+  <!-- HUD -->
+  <div id="hud" class="hidden">
+    <div id="hud-top">
+      <div id="air-widget">
+        <div id="air-icon">🫧</div>
+        <div id="air-bar-wrap"><div id="air-bar"></div><div id="air-text">AIR</div></div>
+      </div>
+      <div id="hud-center">
+        <div id="depth-val">0m</div>
+        <div id="depth-label">DEPTH</div>
+      </div>
+      <div id="hud-right">
+        <div id="hud-money">💰<span id="money-display">0</span></div>
+        <div id="hud-res">🪸<span id="res-coral">0</span> 💎<span id="res-gem">0</span> 🐚<span id="res-shell">0</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MAIN MENU -->
+  <div id="menu-screen" class="screen">
+    <canvas id="menu-canvas"></canvas>
+    <div class="menu-content">
+      <div class="logo-wrap">
+        <div class="logo-eyebrow">OCEAN EXPLORER</div>
+        <div class="logo-main">DEEP<br><span class="logo-accent">DIVE</span></div>
+        <div class="logo-sub">Explore the depths. Collect. Survive.</div>
+      </div>
+      <div class="menu-buttons">
+        <button class="btn-glow" id="btn-play">▶ &nbsp;DIVE IN</button>
+        <button class="btn-outline" id="btn-shop-menu">🛒 &nbsp;UPGRADES</button>
+      </div>
+      <div class="menu-money-badge">💰 <span id="menu-money">0</span></div>
+    </div>
+  </div>
+
+  <!-- SHOP -->
+  <div id="shop-screen" class="screen hidden">
+    <div class="shop-topbar">
+      <button class="btn-icon" id="btn-back-shop">← BACK</button>
+      <div class="shop-title">UPGRADES</div>
+      <div class="shop-bal">💰<span id="shop-money">0</span></div>
+    </div>
+    <div class="shop-tabs">
+      <button class="stab active" data-tab="suit">🤿 SUIT</button>
+      <button class="stab" data-tab="boat">🚤 BOAT</button>
+      <button class="stab" data-tab="items">⚙️ GEAR</button>
+    </div>
+    <div id="shop-grid"></div>
+  </div>
+
+  <!-- GAME OVER -->
+  <div id="gameover-screen" class="screen hidden">
+    <div class="go-panel">
+      <div class="go-title">RUN COMPLETE</div>
+      <div class="go-stats">
+        <div class="go-stat"><span class="gs-label">MAX DEPTH</span><span class="gs-val" id="go-depth">0m</span></div>
+        <div class="go-stat"><span class="gs-label">RESOURCES</span><span class="gs-val" id="go-resources">0</span></div>
+        <div class="go-stat"><span class="gs-label">EARNED</span><span class="gs-val gold" id="go-earnings">+0</span></div>
+        <div class="go-divider"></div>
+        <div class="go-stat big"><span class="gs-label">TOTAL COINS</span><span class="gs-val gold" id="go-total">0</span></div>
+      </div>
+      <div class="go-btns">
+        <button class="btn-glow" id="btn-replay">▶ DIVE AGAIN</button>
+        <button class="btn-outline" id="btn-go-shop">🛒 SHOP</button>
+        <button class="btn-outline" id="btn-go-menu">⌂ MENU</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TUTORIAL -->
+  <div id="tut-overlay" class="hidden">
+    <div class="tut-panel">
+      <div class="tut-title">HOW TO PLAY</div>
+      <div class="tut-rows">
+        <div class="tut-row"><span class="tut-icon">🚤</span><span>You start on the boat — press <b>DIVE</b> to jump in!</span></div>
+        <div class="tut-row"><span class="tut-icon">🎮</span><span>Use the <b>D-PAD</b> to swim in any direction</span></div>
+        <div class="tut-row"><span class="tut-icon">🪸</span><span>Collect glowing resources before air runs out</span></div>
+        <div class="tut-row"><span class="tut-icon">💨</span><span>Swim back up to the surface to refill air</span></div>
+        <div class="tut-row"><span class="tut-icon">💰</span><span>Buy upgrades between dives to go deeper!</span></div>
+      </div>
+      <button class="btn-glow" id="btn-tut-ok">LET'S DIVE! 🤿</button>
+    </div>
+  </div>
+
+  <!-- TOUCH CONTROLS -->
+  <div id="touch-controls" class="hidden">
+    <div id="dpad">
+      <div class="dpad-row"><button class="dp" id="btn-up">▲</button></div>
+      <div class="dpad-mid">
+        <button class="dp" id="btn-left">◀</button>
+        <div class="dp-center"></div>
+        <button class="dp" id="btn-right">▶</button>
+      </div>
+      <div class="dpad-row"><button class="dp" id="btn-down">▼</button></div>
+    </div>
+    <button class="btn-action" id="btn-jump">DIVE /<br>SURFACE</button>
+  </div>
+
+</div>
+<script src="physics.js"></script>
+<script src="shop.js"></script>
+<script src="game.js"></script>
+</body>
+</html>
